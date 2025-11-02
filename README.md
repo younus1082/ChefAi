@@ -206,6 +206,6 @@ If you have any questions or need help, please:
 
 ---
 
-**Made with ❤️ by [Your Name]**
+**Made with ❤️ by younus1082**
 
 *ChefAI - Making cooking accessible and enjoyable for everyone!*
