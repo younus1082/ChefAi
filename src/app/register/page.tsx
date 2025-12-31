@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useAuth } from '../contexts/AuthContext';
 import { 
   EnvelopeIcon, 
@@ -24,7 +23,6 @@ export default function RegisterPage() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState('');
   const { register, isLoading } = useAuth();
-  const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -44,11 +42,10 @@ export default function RegisterPage() {
     
     const result = await register(formData.name, formData.email, formData.password);
     
-    if (result.success) {
-      router.push('/login');
-    } else {
+    if (!result.success) {
       setError(result.error || 'Registration failed');
     }
+    // Redirection is now handled in AuthContext
   };
 
   return (

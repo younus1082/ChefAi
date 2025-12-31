@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useAuth } from '../contexts/AuthContext';
 import { 
   EnvelopeIcon, 
@@ -18,7 +17,6 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const { login, isLoading } = useAuth();
-  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,11 +24,10 @@ export default function LoginPage() {
     
     const result = await login(email, password);
     
-    if (result.success) {
-      router.push('/dashboard');
-    } else {
+    if (!result.success) {
       setError(result.error || 'Login failed');
     }
+    // Redirection is now handled in AuthContext
   };
 
   return (

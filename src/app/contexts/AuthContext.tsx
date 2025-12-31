@@ -1,6 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { useRouter } from 'next/navigation';
 
 interface User {
   id: string;
@@ -35,6 +36,7 @@ interface AuthProviderProps {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter();
 
   // Check for existing session on mount
   useEffect(() => {
@@ -76,7 +78,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
       if (response.ok) {
         setUser(data.user);
-        // No need to store token in localStorage since it's in HTTP-only cookie
+        // Redirect to dashboard after successful login
+        router.push('/dashboard');
         return { success: true };
       } else {
         return { success: false, error: data.error || 'Login failed' };
@@ -104,7 +107,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
       if (response.ok) {
         setUser(data.user);
-        // No need to store token in localStorage since it's in HTTP-only cookie
+        // Redirect to dashboard after successful registration
+        router.push('/dashboard');
         return { success: true };
       } else {
         return { success: false, error: data.error || 'Registration failed' };
@@ -122,8 +126,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     fetch('/api/auth/logout', {
       method: 'POST',
       credentials: 'include' // Include cookies in the request
+    }).then(() => {
+      // Redirect to home page after logout
+      router.push('/');
     }).catch(() => {
-      // Ignore errors on logout
+      // Ignore errors on logout but still redirect
+      router.push('/');
     });
   };
 
